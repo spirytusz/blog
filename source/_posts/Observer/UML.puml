@@ -1,0 +1,33 @@
+@startuml
+
+abstract class BroadCast{
+    {static} -observer
+    +register()
+    +unRegister()
+    #notifyAllObserver()
+    +{abstract} sendBroadCast()
+    +{abstract} getBroadCast()
+}
+class EyeExercisesBroadCast{
+    -broadCastMessage
+    +sendBroadCast()
+    +getBroadCast()
+}
+class FinishClassBroadCast{
+    -broadCastMessage
+    +sendBroadCast()
+    +getBroadCast()
+}
+class Student{
+    +doSomething()
+}
+interface Observer{
+    +{abstract} doSomething()
+}
+
+BroadCast <|-down- EyeExercisesBroadCast
+BroadCast <|-down- FinishClassBroadCast
+Observer -left-* Student
+Observer <|-right-o BroadCast
+
+@enduml
