@@ -467,7 +467,7 @@ boolean draw(Canvas canvas, ViewGroup parent, long drawingTime) {
 最终都会调用`RecordingCanvas.drawRenderNode`，将`View`的内容渲染到渲染缓冲区中，等待渲染到屏幕上；
 
 一图以蔽之，硬件绘制的流程（使用虚线代表向子`View`递归的过程）：
-![](android_view_hardware_draw.drawio.svg)
+![](android_view_hardware_draw.drawio.png)
 
 ## 层级绘制 - 软件绘制
 如果`ThreadedRenderer`的isEnable方法返回了false，说明关闭了硬件加速，就会采用软件绘制。软件绘制的入口在`ViewRootImpl`的drawSoftware方法中，它会直接调用`View`的`draw(Canvas)`方法：
@@ -571,11 +571,11 @@ public class BaseRecordingCanvas extends Canvas {
 
 一图以蔽之（虚线代表向子`View`递归）：
 
-![](android_view_software_draw.drawio.svg)
+![](android_view_software_draw.drawio.png)
 
 
 总体而言，一次`View`树的完整绘制流程如图所示（虚线代表向子`View`递归）：
-![](android_view_software_hardware_draw.drawio.svg)
+![](android_view_software_hardware_draw.drawio.png)
 
 # 总结
 `View`的绘制分为硬件绘制和软件绘制，对于`View`树上的每一个节点`View`:

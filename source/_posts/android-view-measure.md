@@ -95,7 +95,7 @@ public final void measure(int widthMeasureSpec, int heightMeasureSpec) {
 # MeasureSpec
 在测量过程中，频繁出现`MeasureSpec`的身影，`MeasureSpec`是什么？我认为是父`View`对子`View`的约束，子`View`需要在这个约束之下进行测量。`MeasureSpec`的结构如下：
 
-![](measurespec_struct.svg)
+![](measurespec_struct.drawio.png)
 
 可以从图中看出：
 
@@ -169,7 +169,7 @@ private void setMeasuredDimensionRaw(int measuredWidth, int measuredHeight) {
 
 因此，对于每个`View`节点，其测量过程必然是这样的：
 
-![](view_group_measure.drawio.svg)
+![](view_group_measure.drawio.png)
 
 
 检查`ViewGroup`的代码发现，`ViewGroup`并没有重写onMeasure方法，需要找`ViewGroup`的子类验证父`View`与子`View`的测量逻辑。以`FrameLayout`为例：
@@ -361,7 +361,7 @@ getChildMeasureSpec方法不长，但它在父子`View`的测量中起着承上�
 
 以上过程可以用一张图来概括：
 
-![](view_recursively_draw.drawio.svg)
+![](view_recursively_draw.drawio.png)
 
 # 打破约束？
 管中窥豹，从`FrameLayout`的测量逻辑中，我们可以发现一棵`View`树的测量是：

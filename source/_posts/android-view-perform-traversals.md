@@ -101,7 +101,7 @@ private static boolean shouldUseDisplaySize(final WindowManager.LayoutParams lp)
 
 确认窗口大小的总体流程如下：
 
-![perform_traversals_compute_frame_size.drawiow](perform_traversals_compute_frame_size.drawio.svg)
+![perform_traversals_compute_frame_size.drawiow](perform_traversals_compute_frame_size.drawio.png)
 
 # 预测量
 为什么需要预测量？
@@ -213,7 +213,7 @@ private boolean measureHierarchy(final View host, final WindowManager.LayoutPara
 
 预测量的主要流程如图：
 
-![perform_traversals_permeasure](perform_traversals_permeasure.drawio.svg)
+![perform_traversals_permeasure](perform_traversals_permeasure.drawio.png)
 
 
 # 三大流程 - 测量

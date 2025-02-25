@@ -101,7 +101,7 @@ suspend inline fun <T> suspendCoroutine(
 ```
 
 `suspendCoroutineUninterceptedOrReturn`的作用就是将编译器生成的`Continuation $completion`参数通过lambda参数暴露给给我们，所以这里的`c: Continuation<T>`事实上就是被`DispatchedContinuation`包装了的`BaseContinuationImpl`。我们在`willSuspendFunc`方法拿到的continuation，它的结构如图所示：
-![](safe_continuation_wrap.drawio.svg)
+![](safe_continuation_wrap.drawio.png)
 
 执行完传入`suspendCoroutine`的lambda表达式后，重点在于`SafeContinuation`的`getOrThrow`方法：
 
@@ -176,7 +176,7 @@ public final Object invokeSuspend(Object param1Object) {
 ①处调用了`willSuspendFuc`方法，并在②返回了`COROUTINE_SUSPEND`，于是乎在③处便也返回了`COROUTINE_SUSPEND`。③处在源码中的表现，相当于代码的执行停在了挂起方法`willSuspendFunc`处。只有在另一个线程起来，resume了Continuation，代码才会继续执行。
 
 当另一个线程起来的时候就会调用`Continuation`的`resumeWith`方法。此时的`Continuation`结构如图所示（与上图一模一样）：
-![](safe_continuation_wrap.drawio.svg)
+![](safe_continuation_wrap.drawio.png)
 
 其调用链如同剥洋葱一样，从外到内按顺序调用`Continuation`的`resumeWith`方法。先来看看`SafeContinuation`：
 
@@ -230,7 +230,7 @@ public final Object invokeSuspend(Object param1Object) {
 因为在挂起前label被置为了1（①处代码），所以协程恢复时会走case 1，打印出字符串。自从挂起函数`withSuspendFunc`执行完毕，走完**执行-挂起-恢复**完整的流程。
 
 完整的**执行-挂起-恢复**如图所示：
-![](suspend_func_exec_suspend_resume.drawio.svg)
+![](suspend_func_exec_suspend_resume.drawio.png)
 
 经过分析和代码跟进后，我们可以发现，一个挂起函数的**执行-挂起-恢复**流程事实上是开发者、Kotlin协程标准库以及kotlin编译器三者打配合共同完成的。
 
@@ -314,7 +314,7 @@ public Object invokeSuspend(Object param) {
 ```
 
 上面代码执行的顺序如图：
-![](suspend_func_sequence_exec.drawio.svg)
+![](suspend_func_sequence_exec.drawio.png)
 
 1. 每一次调用`invokeSuspend`都会扭转一次状态，即label++；
 2. 对于每个状态（case），都会调用挂起函数；

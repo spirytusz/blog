@@ -117,7 +117,7 @@ internal class CombinedContext(
 
 从定义来看，`CoroutineContext`类似于集合的递归定义，大致的结构如图所示：
 
-![](combined_context.drawio.svg)
+![](combined_context.drawio.png)
 
 既然是集合，必定重新实现了`CoroutineContext`关于集合修改的方法：
 
@@ -140,7 +140,7 @@ internal class CombinedContext(...) {
 	...
 }
 ```
-![](combined_context_get.drawio.svg)
+![](combined_context_get.drawio.png)
 
 ### minusKey方法
 minusKey方法，顾名思义就是根据给定的`Key`删除集合中的对应元素。看代码会首先判断最右边的元素，如果key相同，则保留左支；否则在左支线性搜索。处理好做减法后集合不变和集合变空这两种边界情况，剩下的就是一般的情况——返回一个新的`CombinedContext`。
@@ -158,7 +158,7 @@ internal class CombinedContext(...) {
     }
 }
 ```
-![](CombinedContext_minusKey.drawio.svg)
+![](CombinedContext_minusKey.drawio.png)
 
 ### plus方法
 `CombinedContext`并没有重写plus方法，而是使用了`CoroutineContext`的默认实现。因为要保证拦截器处于上下文的最右边以方便快速取到拦截器，所以默认实现稍显复杂。
@@ -166,15 +166,15 @@ internal class CombinedContext(...) {
 虽然plus方法较为复杂，但其本质还是重写了`+`操作符。`+`操作符的左右边都是`CorouinteContext`，可以是`CoroutineContext.Element`和`CombinedContext`。因为加法是从左至右的，所以分为三种情况（使用`[]`代表`CombinedContext`，最右边即为element字段）：
 
 #### 存在空集合EmptyCoroutineContext
-![](CombinedContext_plus_desc.drawio.svg)
+![](CombinedContext_plus_desc.drawio.png)
 
 #### Element + Element
-![](CombinedContext_plus_desc_2.drawio.svg)
+![](CombinedContext_plus_desc_2.drawio.png)
 
 因为一个上下文中拦截器有且仅有一个，所以默认实现是后来的覆盖前面的（情况③），且拦截器必定在上下文的最右边。
 
 #### CombinedContext + Element
-![](CombinedContext_plus_desc_3.drawio.svg)
+![](CombinedContext_plus_desc_3.drawio.png)
 
 拦截器的覆盖如情况⑤，结果也必定是拦截器在最右边。
 
@@ -208,13 +208,13 @@ internal class CombinedContext(...) {
 ## 小结
 `CoroutineContext`既可以是集合的元素，也可以是集合本身，其表现形式分别是`CoroutineContext.Element`和`CombinedContext`。类图如下：
 
-![](CoroutineContext_UML.drawio.svg)
+![](CoroutineContext_UML.drawio.png)
 
 同时，为了方便搜索，`CoroutineContext`被设计成了Indexed Sets的数据结构——既有List的线性结构，也有Map的键值对结构。
 
 # CoroutineContext的元素
 阅读完上文，我们知道原来`CoroutineContext`是一个线性键值对集合结构，那这个集合必定有多种元素。主要的元素与`CoroutineContext`的关系如下：
-![](CoroutineContext_Elements.drawio.svg)
+![](CoroutineContext_Elements.drawio.png)
 
 ## ContinuationInterceptor
 `CoroutineContext`的元素有协程拦截器：`ContinuationInterceptor`。顾名思义，协程拦截器是是用于拦截协程的。如果你对协程有大致的了解，就会知道Kotlin协程本质还是回调，其表现形式就是`Continuation`:

@@ -291,7 +291,7 @@ data class ServiceImplemetationMapping(
 ### 小结
 KSP帮助我们实现单工程扫描和多工程信息聚合，总体工作流程如下图：
 
-![](multi-project-processor-aggregation.drawio.svg)
+![](multi-project-processor-aggregation.drawio.png)
 
 ## 自定义Gradle Task实现插入代码
 有了所有服务和实现的信息，就可以考虑代码生成的逻辑了。我们可以自定义Gradle Task来完成插入服务、实现信息的逻辑。插入的代码可以是源码，也可以是字节码。但由于我们需要代码隔离，因此我们只能选择插入字节码。

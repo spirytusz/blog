@@ -80,7 +80,7 @@ private suspend fun suspendFunc() = suspendCoroutine<Int> { cont ->
 
 那么原因是什么呢？通过上篇文章[浅谈Kotlin协程(3)-非阻塞式挂起与恢复](../kotlin-coroutine-nonblocking-suspend)，我们知道`suspendCoroutine`所暴露出来的`Continuation`是这么一个结构：
 
-![](../kotlin-coroutine-nonblocking-suspend/safe_continuation_wrap.drawio.svg)
+![](safe_continuation_wrap.drawio.png)
 
 `SafeContinuation`的作用是保证`suspendCoroutine`所暴露的`Continuation`只调用一次；
 
@@ -193,7 +193,7 @@ val job0 = coroutineScope.launch {
 ```
 
 从直觉来看，很自然的就能知道三个job之间的关系，job1、job2是job0的子协程:
-![](parent_child_job_tree.drawio.svg)
+![](parent_child_job_tree.drawio.png)
 
 事实上在标准库中的实现也确实是这个结构。父子协程关系的建立被标准库抽象成了`Job.attachChild`方法，在启动一个`Job`（即协程）时会与父`Job`建立父子关系。
 
@@ -299,7 +299,7 @@ open class JobSupport  : Job, ChildJob, ParentJob {
 
 光阅读代码略显抽象，不妨以上文的`job0`，`job1`和`job2`为例，使用`GlobalScope.launch`启动`job0`时，由于`job0`并没有父`Job`，所以`Job`构建父子关系的过程相对较为简单，其结果为：
 
-![](job0_initial.drawio.svg)
+![](job0_initial.drawio.png)
 
 由于`job0`的上下文`CoroutineContext`中没有`Job`，因此其`parentHandle`被初始化为`NonDisposableHandle`，然后直接返回。而`_state`则使用默认值`Empty`，代表没有任何的取消、完成回调。
 
@@ -309,11 +309,11 @@ open class JobSupport  : Job, ChildJob, ParentJob {
 
 因此，在`job1`启动后，协程间的关系为：
 
-![](job0_with_job1.drawio.svg)
+![](job0_with_job1.drawio.png)
 
 `job1`启动完毕后，`job2`的启动过程也类似，我们可以如法炮制。当涉及到双向链表的插入操作时，`job0`与`job2`的桥梁——`ChildHandleNode`会被插入到表头之后。最终，在`job2`启动后，协程间的关系为：
 
-![](job0_parent.drawio.svg)
+![](job0_parent.drawio.png)
 
 ## 小结
 协程在启动时，会去检查传入的协程上下文`CoroutineContext`中是否有`Job`的存在。如果存在`Job`，则认为是父`Job`，进而去初始化父子`Job`的关系；反之则跳过；
@@ -356,13 +356,13 @@ class JobSupport {
 
 贴出的代码省略了各种中间状态，只保留主流程；其调用流程如下：
 
-![](job_make_complete.drawio.svg)
+![](job_make_complete.drawio.png)
 
 可以看到，在`tryMakeCompleting`方法内，会对当前`Job`的状态进行一次判断，以决定走快路径还是走慢路径。所谓快路径和慢路径，区别在于慢路径需要处理一些中间状态，例如多个异常合并为一个异常、挂起等待子`Job`完成等状态，但结果都是殊途同归，和快路径一样，最终会扭转`Job`自身的状态，并通知子`Job`和父`Job`。
 
 先来看看慢路径，慢路径主要处理了多个异常合并为一个异常、挂起等待子`Job`完成等逻辑。总体流程如下：
 
-![](job_make_completion_slow_path.drawio.svg)
+![](job_make_completion_slow_path.drawio.png)
 
 这里有几个比较关键的方法，`nofityCancelling`、`tryWaitForChild`和`cancelParent`
 

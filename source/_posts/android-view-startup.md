@@ -279,7 +279,7 @@ private void performTraversals() {
 3. 在`Activity`回调onResume后，会通过`WindowManagerGlobal`创建一个`ViewRootImpl`，此后通过`ViewRootImpl`请求第一次布局，在通过`Choregrapher`请求第一次VSync信号；之后收到VSync信号后，执行performTraversals，正式进入View的三大流程: 测量、布局以及绘制。
 
 
-![android-view-startup](android-view-startup.svg)
+![android-view-startup](android-view-startup.drawio.png)
 
 
 

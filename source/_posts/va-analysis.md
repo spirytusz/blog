@@ -72,7 +72,7 @@ public synchronized InstallResult installPackage(String path, int flags, boolean
 }
 ```
 
-![安装流程](安装流程.svg)
+![安装流程](安装流程.drawio.png)
 
 可以看到，在VA内部安装虚拟应用，VA主要做了这几件事
 
@@ -153,7 +153,7 @@ public void dispatchMessage(@NonNull Message msg) {
 }
 ```
 
-![HCallback_perview.svg](HCallback_perview.svg)
+![HCallback_perview.drawio.png](HCallback_perview.drawio.png)
 
 ## 动态代理
 注入实例可以做到方法拦截，是因为Handler对外提供了Callback接口，允许开发者对其执行流程进行控制。并不通用。动态代理更为通用一些，它能代理接口方法，并返回一个经过代理的实例给你。来看看VA使用动态代理做了什么。以Hook Activity启动为例：
@@ -429,7 +429,7 @@ private boolean handleLaunchActivity(Message msg) {
 }
 ```
 
-![HCallbackStub启动流程](./HCallbackStub启动流程.svg)
+![HCallbackStub启动流程](./HCallbackStub启动流程.drawio.png)
 
 在这里，HCallbackStub主要做了一下几件事：
 
@@ -443,7 +443,7 @@ private boolean handleLaunchActivity(Message msg) {
 
 启动Activity中涉及到VA中的总流程：
 
-![启动流程.svg](启动流程.svg)
+![启动流程.drawio.png](启动流程.drawio.png)
 
 # 问题解答
 回顾一下上文提出的问题
@@ -506,7 +506,7 @@ private Context createPackageContext(String packageName) {
 }
 ```
 
-![bindApplication流程](./bindApplication流程.svg)
+![bindApplication流程](./bindApplication流程.drawio.png)
 
 VA能够初始化apk包中的application，最关键的就是调用android sdk 的 `createPackageContext `方法。通过这个方法，可以拿到LoadedApk对象，进而初始化application。
 
@@ -543,7 +543,7 @@ private Activity performLaunchActivity(ActivityClientRecord r, Intent customInte
 }
 ```
 
-![activity创建](./activity创建.svg)
+![activity创建](./activity创建.drawio.png)
 
 同样这里也带上了`CONTEXT_INCLUDE_CODE`来加载`LoadedApk`对象，经过这个逻辑，便可以使用`LoadedApk`加载并初始化appContext，此时appContext的classloader，便有了加载activity类的能力。
 
@@ -595,7 +595,7 @@ static ContextImpl createActivityContext(ActivityThread mainThread,
 ```
 资源同样也是依赖于LoadedApk，而LoadedApk已事先创建完毕，资源加载就能正常往下走。
 
-![资源加载](./资源加载.svg)
+![资源加载](./资源加载.drawio.png)
 
 
 ## Hook能力

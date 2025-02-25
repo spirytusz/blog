@@ -240,7 +240,7 @@ void layoutChildren(int left, int top, int right, int bottom, boolean forceLeftG
 
 一图胜千言：
 
-![](frame_layout_child_layout.drawio.svg)
+![](frame_layout_child_layout.drawio.png)
 
 # View树的布局
 了解了坐标系、padding和margin后，就可以从`FrameLayout`的布局代码，还原出整棵`View`树的布局流程：
@@ -251,7 +251,7 @@ void layoutChildren(int left, int top, int right, int bottom, boolean forceLeftG
 
 总而言之，一棵`View`树的布局流程如图：
 
-![](view_tree_layout.drawio.svg)
+![](view_tree_layout.drawio.png)
 
 # 总结
 `View`布局的总体流程相较于`View`测量的而言较为简单，主要分为是否有子`View`这两种情况：

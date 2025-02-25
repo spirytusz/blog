@@ -125,7 +125,7 @@ abstract class AbstractCoroutine<in T>(
 ```
 
 出现的类中，他们互相之间的关系为：
-![](abstract_coroutine_uml.drawio.svg)
+![](abstract_coroutine_uml.drawio.png)
 
 ## 启动协程
 协程创建完毕，接下来在③处启动协程。由于启动模式是`DEFAULT`，根据`AbstractCoroutine`的注释，会调用`startCoroutineCancellable`方法。阅读了`CoroutineStart`的源码，发现它重写的`invoke`操作符：
@@ -223,7 +223,7 @@ static final class SuspendLambdaAnonymousClass extends SuspendLambda
 ```
 
 协程体本质还是匿名内部类，经过编译后编译器会生成一个内部类`SuspendLambdaAnonymousClass`，它是`SuspendLambda`的子类，所以`SuspendLambdaAnonymousClass`本身也是一个`Continuation`。多个类的关系如下：
-![](continuation_impl_uml.drawio.svg)
+![](continuation_impl_uml.drawio.png)
 
 其中，`<<anonymous suspend lambda>>` 就是我们传入的lambda，即协程体。
 
@@ -246,7 +246,7 @@ public Continuation<Unit> create(
 
 其本质还是将传入的`Continuation`（`StandaloneCoroutine`）做一次包装，包装成`BaseContinuationImpl`类型。前后者的关系如下图所示：
 
-![](base_wrap_abstract_coroutine.drawio.svg)
+![](base_wrap_abstract_coroutine.drawio.png)
 
 ### intercepted
 接下来会调用`intercepted`方法，从方法的名字就可以看出这个是拦截协程用的。
@@ -281,7 +281,7 @@ public abstract class CoroutineDispatcher : ContinuationInterceptor {
 
 所以此时的`Continuation`相当于：
 
-![](dispatched_wrap_base_wrap_abstract_coroutine.drawio.svg)
+![](dispatched_wrap_base_wrap_abstract_coroutine.drawio.png)
 
 ### resumeCancellableWith
 最终来到了`resumeCancellableWith`方法，查看它的源码：
@@ -334,7 +334,7 @@ internal class DispatchedContinuation<in T>(
 
 不管是否会被调度，最终都会执行`DispatchedContinuation.continuation`的`resumeWith`方法。这个continuation是什么？结合上文的分析，我们知道Kotlin协程使用套娃的方式，一个`Continuation`套另一个`Continuation`。所以，最终各个`Continuation`的调用关系如下，向下调用，向上回溯：
 
-![](wrap_continuation_call_and_back.drawio.svg)
+![](wrap_continuation_call_and_back.drawio.png)
 
 这里的continuation就是`BaseContinuationImpl`，跟进它的resumeWith方法（精简了代码）：
 
