@@ -114,3 +114,5 @@ markdown:
     - markdown-it-abbr
     - markdown-it-emoji
     - hexo-math
+
+disqus_username: spirytusz
